@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theremin Hand</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Theremin Hand</h1>
+    <button id="startButton">Start</button>
+    <div>
+        <video id="webcam" style="display: none;"></video>
+        <canvas id="outputCanvas" width="640" height="480"></canvas>
+    </div>
+
+    <!-- Required libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
