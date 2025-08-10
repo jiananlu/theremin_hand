@@ -41,7 +41,7 @@ The application can be broken down into five key modules (which will be implemen
 
 This plan is structured to build the application incrementally, ensuring each part works before moving to the next.
 
-#### **Priority 1: Basic HTML/CSS Structure and Project Setup**
+#### [DONE] **Priority 1: Basic HTML/CSS Structure and Project Setup**
 
 **Goal:** Create the basic webpage and include the necessary libraries.
 
@@ -68,7 +68,7 @@ This plan is structured to build the application incrementally, ensuring each pa
 3.  **Create `script.js`:**
     *   Leave it empty for now.
 
-#### **Priority 2: Webcam and Canvas Integration**
+#### [DONE] **Priority 2: Webcam and Canvas Integration**
 
 **Goal:** Get the user's webcam feed and display it on the canvas.
 
@@ -107,7 +107,7 @@ This plan is structured to build the application incrementally, ensuring each pa
     ```
     *Self-Correction:* A manual `requestAnimationFrame` loop is good for testing, but MediaPipe's `Camera` utility provides its own `onFrame` callback. We should structure the code to use that. The next step will refine this.
 
-#### **Priority 3: Hand Tracking Integration**
+#### [DONE] **Priority 3: Hand Tracking Integration**
 
 **Goal:** Detect the hand and draw the landmarks on the canvas over the video feed.
 
