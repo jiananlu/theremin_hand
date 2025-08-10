@@ -184,8 +184,73 @@ function onResults(results) {
     }
     console.log('=== PITCH MAPPING LOGIC END ===');
     
+    // Priority 6: Draw the Musical Scale UI
+    console.log('=== VISUAL SCALE UI DRAWING START ===');
+    
+    // Restore canvas state before drawing UI so it's not mirrored
     canvasCtx.restore();
-    console.log('Canvas state restored, frame processing complete');
+    console.log('Canvas state restored for UI drawing (no longer mirrored)');
+    
+    console.log('Drawing musical scale UI...');
+    console.log('Scale to draw:', noteScale);
+    console.log('Currently highlighted note:', lastPlayedNote || 'none');
+    
+    // Draw the musical scale on the left side of the canvas
+    noteScale.forEach((note, index) => {
+        const y = (index + 0.5) * (canvasElement.height / noteScale.length);
+        const x = 20; // Position on the left side
+        
+        console.log(`Drawing note ${note} at index ${index}:`, {
+            x: x,
+            y: y.toFixed(1),
+            isHighlighted: note === lastPlayedNote
+        });
+        
+        // Set font and color based on whether this note is currently playing
+        if (note === lastPlayedNote) {
+            console.log(`*** HIGHLIGHTING NOTE: ${note} ***`);
+            canvasCtx.fillStyle = '#00FF00'; // Bright green for active note
+            canvasCtx.font = "bold 32px Arial";
+            
+            // Draw a background rectangle for the highlighted note
+            const textWidth = canvasCtx.measureText(note).width;
+            canvasCtx.save();
+            canvasCtx.fillStyle = 'rgba(0, 255, 0, 0.2)'; // Semi-transparent green background
+            canvasCtx.fillRect(x - 5, y - 25, textWidth + 10, 35);
+            canvasCtx.restore();
+            canvasCtx.fillStyle = '#00FF00'; // Reset text color
+            
+            console.log(`Highlighted note background drawn for ${note}`);
+        } else {
+            console.log(`Drawing normal note: ${note}`);
+            canvasCtx.fillStyle = '#FFFFFF'; // White for inactive notes
+            canvasCtx.font = "28px Arial";
+        }
+        
+        // Draw the note text
+        canvasCtx.fillText(note, x, y);
+        console.log(`Note ${note} text drawn at position (${x}, ${y.toFixed(1)})`);
+    });
+    
+    // Draw a scale indicator line on the right side to show the Y-position mapping
+    console.log('Drawing scale indicator lines...');
+    canvasCtx.strokeStyle = '#CCCCCC';
+    canvasCtx.lineWidth = 1;
+    canvasCtx.setLineDash([2, 2]); // Dashed line
+    
+    for (let i = 0; i <= noteScale.length; i++) {
+        const y = i * (canvasElement.height / noteScale.length);
+        canvasCtx.beginPath();
+        canvasCtx.moveTo(canvasElement.width - 50, y);
+        canvasCtx.lineTo(canvasElement.width, y); // Short lines on the right
+        canvasCtx.stroke();
+        console.log(`Scale line drawn at y=${y.toFixed(1)}`);
+    }
+    
+    canvasCtx.setLineDash([]); // Reset line dash
+    
+    console.log('=== VISUAL SCALE UI DRAWING END ===');
+    console.log('Frame processing complete');
 }
 
 // Set the onResults callback for MediaPipe Hands
