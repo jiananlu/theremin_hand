@@ -236,7 +236,7 @@ This plan is structured to build the application incrementally, ensuring each pa
     }
     ```
 
-#### **Priority 6: Adding the Visual Scale UI**
+#### [DONE] **Priority 6: Adding the Visual Scale UI**
 
 **Goal:** Draw the musical scale on the canvas and highlight the currently playing note.
 
