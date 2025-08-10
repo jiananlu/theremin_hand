@@ -18,6 +18,10 @@ let synth;
 let soundEnabled = false;
 let lastPlayedNote = null;
 
+// Priority 5: Musical Scale Definition - Notes mapped from top to bottom of screen
+const noteScale = ['C5', 'B4', 'A4', 'G4', 'F4', 'E4', 'D4', 'C4'];
+console.log('Musical scale defined:', noteScale);
+
 console.log('DOM elements loaded:', {
     videoElement: !!videoElement,
     canvasElement: !!canvasElement,
@@ -105,7 +109,81 @@ function onResults(results) {
         console.log('No hand landmarks detected');
     }
     
-    // We will add audio logic here in step 5
+    // Priority 5: Hand Position to Pitch Mapping Logic
+    console.log('=== PITCH MAPPING LOGIC START ===');
+    console.log('Sound enabled status:', soundEnabled);
+    console.log('Current synth object:', !!synth);
+    console.log('Last played note before processing:', lastPlayedNote);
+    
+    if (soundEnabled && synth) {
+        if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
+            // Landmark 8 is the tip of the index finger
+            const indexFingerTip = results.multiHandLandmarks[0][8];
+            const yPos = indexFingerTip.y; // Normalized value from 0.0 (top) to 1.0 (bottom)
+            
+            console.log('Hand detected! Index finger Y position:', yPos.toFixed(4));
+            console.log('Screen position breakdown:', {
+                raw_y: yPos,
+                percentage_from_top: (yPos * 100).toFixed(1) + '%',
+                is_top_half: yPos < 0.5 ? 'YES' : 'NO',
+                is_bottom_half: yPos >= 0.5 ? 'YES' : 'NO'
+            });
+            
+            // Map the Y-position to a note in our scale
+            const noteIndex = Math.min(Math.floor(yPos * noteScale.length), noteScale.length - 1);
+            const currentNote = noteScale[noteIndex];
+            
+            console.log('Note mapping calculation:', {
+                yPos: yPos.toFixed(4),
+                scale_length: noteScale.length,
+                raw_index: yPos * noteScale.length,
+                clamped_index: noteIndex,
+                selected_note: currentNote
+            });
+            
+            // Play the note, but only if it's different from the last one
+            if (currentNote && currentNote !== lastPlayedNote) {
+                console.log(`*** NOTE CHANGE DETECTED! ***`);
+                console.log(`Changing from "${lastPlayedNote}" to "${currentNote}"`);
+                
+                // Release the previous note first
+                if (lastPlayedNote !== null) {
+                    console.log(`Releasing previous note: ${lastPlayedNote}`);
+                    synth.triggerRelease();
+                }
+                
+                // Attack the new note
+                console.log(`Attacking new note: ${currentNote}`);
+                synth.triggerAttack(currentNote);
+                lastPlayedNote = currentNote;
+                
+                console.log(`Audio state updated - lastPlayedNote is now: ${lastPlayedNote}`);
+            } else {
+                console.log('Note mapping result: Same note as before, no audio change needed');
+                console.log(`Current note: ${currentNote}, Last played: ${lastPlayedNote}`);
+            }
+        } else {
+            // No hand detected - release any playing note
+            console.log('NO HAND DETECTED');
+            if (lastPlayedNote !== null) {
+                console.log(`Releasing note due to no hand: ${lastPlayedNote}`);
+                synth.triggerRelease();
+                lastPlayedNote = null;
+                console.log('lastPlayedNote reset to null - no sound should be playing');
+            } else {
+                console.log('No hand detected and no note was playing - no action needed');
+            }
+        }
+    } else {
+        console.log('Audio processing skipped - sound not enabled or synth not available');
+        console.log('Debug audio state:', {
+            soundEnabled: soundEnabled,
+            synth_available: !!synth,
+            reason: !soundEnabled ? 'Sound disabled' : 'Synth not available'
+        });
+    }
+    console.log('=== PITCH MAPPING LOGIC END ===');
+    
     canvasCtx.restore();
     console.log('Canvas state restored, frame processing complete');
 }

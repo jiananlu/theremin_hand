@@ -168,7 +168,7 @@ This plan is structured to build the application incrementally, ensuring each pa
 
 **At this point, running the application should show a mirrored webcam feed with green lines and red dots tracking your hand.**
 
-#### **Priority 4: Audio Synthesis Setup**
+#### [DONE] **Priority 4: Audio Synthesis Setup**
 
 **Goal:** Create a synthesizer and make it play a test note.
 
@@ -195,7 +195,7 @@ This plan is structured to build the application incrementally, ensuring each pa
     });
     ```
 
-#### **Priority 5: Connecting Hand Position to Pitch (The Core Logic)**
+#### [DONE] **Priority 5: Connecting Hand Position to Pitch (The Core Logic)**
 
 **Goal:** Use the index finger's Y-position to control the pitch of the synthesizer.
 
